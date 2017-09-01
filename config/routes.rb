@@ -4,6 +4,6 @@ Rails.application.routes.draw do
 	
 	get 'debugger/index'
 
-	get '/canales', to: 'debugger#canales', as: 'canales'
+	get '/canales', to: 'canales#canales', as: 'canales'
 
 end

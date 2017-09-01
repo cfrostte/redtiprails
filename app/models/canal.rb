@@ -1,0 +1,2 @@
+class Canal < ApplicationRecord
+end
