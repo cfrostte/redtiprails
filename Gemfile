@@ -59,3 +59,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 group :production do
   gem 'pg', '~> 0.20.0'
 end
+
+################################################################################
+
+gem 'httparty', '~> 0.13.7' # gem install httparty -v 0.13.7 (quizas como admin)
