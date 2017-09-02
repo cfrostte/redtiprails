@@ -63,11 +63,7 @@ def destroy
 end
 
 def login
-  # @usuario = Usuario.where(nickname: params['nickname']).where(password: params['password'])
   @usuario = Usuario.find_by(nickname: params['nickname'], password: params['password'])
-  puts "------------------------------------------------------------------"
-  puts @usuario
-  puts "------------------------------------------------------------------"
   render json: @usuario
 end
 
