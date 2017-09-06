@@ -1,4 +1,16 @@
 class Usuarios::RegistrationsController < Devise::RegistrationsController
+  respond_to :json
+  def create
+
+    user = Usuario.new(params[:user])
+    if user.save
+      render :json=> user.as_json(:auth_token=>user.authentication_token, :email=>user.email), :status=>201
+      return
+    else
+      warden.custom_failure!
+      render :json=> user.errors, :status=>422
+    end
+  end
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 

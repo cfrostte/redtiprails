@@ -1,8 +1,8 @@
 class Usuario < ApplicationRecord
 	devise :database_authenticatable, :registerable, :confirmable, :recoverable
-	
-	has_many :canals
 
+	has_many :canals
+	has_many :mensajes
 	before_save :ensure_authentication_token
 
   def ensure_authentication_token
