@@ -64,3 +64,5 @@ end
 
 gem 'httparty', '~> 0.13.7' # gem install httparty -v 0.13.7 (quizas como admin)
 gem 'active_model_serializers', '~>0.8.1'
+gem 'rack-cors', :require => 'rack/cors'
+gem 'devise'
