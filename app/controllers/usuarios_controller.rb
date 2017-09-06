@@ -1,9 +1,10 @@
 class UsuariosController < ApplicationController
 
+  respond_to :json
+
   def index
     @usuarios = Usuario.all
     render json: @usuarios
-
   end
 
 # GET /usuarios/1

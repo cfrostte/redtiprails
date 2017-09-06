@@ -1,10 +1,15 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-	before_filter :authenticate_user_from_token!
+
+	before_action :authenticate_usuario!
+	respond_to :json
+	# before_action :authenticate_usuario!, except: [:index, :home]
+
+	# before_action :authenticate_user_from_token!
 
   # Enter the normal Devise authentication path,
   # using the token authenticated user if available
-  before_filter :authenticate_usuario!
+  # before_filter :authenticate_usuario!
 
   private
 
