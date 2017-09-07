@@ -1,7 +1,11 @@
 class Usuarios::SessionsController < Devise::SessionsController
-  respond_to :json
 
-    render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
+  # respond_to :json
+
+  # render :json => {:success => false, :message => "Error with your login or password"}, :status => 401
+  
+  ############################################################################## 
+
   # def create
   #   super do |usuario|
   #     if request.format.json?
@@ -74,4 +78,5 @@ class Usuarios::SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
+
 end

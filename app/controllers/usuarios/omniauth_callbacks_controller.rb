@@ -1,4 +1,5 @@
 class Usuarios::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  
   # You should configure your model like this:
   # devise :omniauthable, omniauth_providers: [:twitter]
 
@@ -25,4 +26,5 @@ class Usuarios::OmniauthCallbacksController < Devise::OmniauthCallbacksControlle
   # def after_omniauth_failure_path_for(scope)
   #   super(scope)
   # end
+  
 end

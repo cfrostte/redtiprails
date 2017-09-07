@@ -12,6 +12,8 @@ class UsuariosController < ApplicationController
     render json: @usuario
   end
 
+  ############################################################################## 
+
   # GET /usuarios/1
   # GET /usuarios/1.json
   def show
@@ -75,8 +77,7 @@ class UsuariosController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def usuario_params
-    # params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
-    params.require(:usuario).permit(:nickname, :password, :email)
+    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
   end
 
 end
