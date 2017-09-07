@@ -1,20 +1,36 @@
 class Usuarios::RegistrationsController < Devise::RegistrationsController
   
-  # respond_to :json
+  respond_to :json
   
-  # def create
+  def create
 
-  #   user = Usuario.new(params[:user])
+    usuario = Usuario.new(usuario_params)
   
-  #   if user.save
-  #     render :json=> user.as_json(:auth_token=>user.authentication_token, :email=>user.email), :status=>201
-  #     return
-  #   else
-  #     warden.custom_failure!
-  #     render :json=> user.errors, :status=>422
-  #   end
+    if usuario.save
+
+      render :json => usuario.as_json(
+        :auth_token => usuario.authentication_token, 
+        :email => usuario.email), :status => 201
+      return
+    
+    else
+    
+      warden.custom_failure!
+      render :json => usuario.errors, :status => 422
+    
+    end
   
-  # end
+  end
+
+  private
+
+  def usuario_params
+    
+    params.require(:usuario).permit(
+      :nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar
+    )
+  
+  end
 
   ############################################################################## 
 
