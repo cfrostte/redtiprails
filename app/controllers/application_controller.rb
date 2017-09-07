@@ -2,10 +2,10 @@ class ApplicationController < ActionController::Base
   
   respond_to :json # Soporte para peticiones JSON (excepto GET y HEAD)
   
-  protect_from_forgery with: :exception # Proteccion de solicitudes falsas
+  # protect_from_forgery with: :exception # Devise se antepondra a todo
   
   # before_action :authenticate_usuario!, except: [:index, :home]
-	before_action :authenticate_user_from_token!
+	# before_action :authenticate_user_from_token!
 
   private
 

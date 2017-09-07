@@ -7,6 +7,11 @@ class UsuariosController < ApplicationController
     render json: @usuarios
   end
 
+  def login
+    @usuario = Usuario.find_by(nickname: params['nickname'], password: params['password'])
+    render json: @usuario
+  end
+
   # GET /usuarios/1
   # GET /usuarios/1.json
   def show
@@ -27,7 +32,6 @@ class UsuariosController < ApplicationController
   # POST /usuarios.json
   def create
     @usuario = Usuario.new(usuario_params)
-
     respond_to do |format|
       if @usuario.save
         format.html { redirect_to @usuario, notice: 'Usuario was successfully created.' }
@@ -63,11 +67,6 @@ class UsuariosController < ApplicationController
     end
   end
 
-  def login
-    @usuario = Usuario.find_by(nickname: params['nickname'], password: params['password'])
-    render json: @usuario
-  end
-
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_usuario
@@ -76,7 +75,8 @@ class UsuariosController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def usuario_params
-    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
+    # params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
+    params.require(:usuario).permit(:nickname, :password, :email)
   end
 
 end
