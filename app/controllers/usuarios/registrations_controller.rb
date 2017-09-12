@@ -27,7 +27,7 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   def usuario_params
     
     params.require(:usuario).permit(
-      :nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar, :encrypted_password
+      :nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar, :encrypted_password, :host
     )
   
   end
