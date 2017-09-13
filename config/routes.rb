@@ -8,8 +8,6 @@ Rails.application.routes.draw do
 		unlocks: 'usuarios/unlocks', 
 	}
 	
-	# resources 'usuarios'
-
 	get '/canales', to: 'canales#index', as: 'canales'
 	get '/debugger', to: 'debugger#index', as: 'debugger'
 	get '/login', to: 'usuarios#login', as: 'login'

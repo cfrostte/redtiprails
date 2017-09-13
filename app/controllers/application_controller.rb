@@ -6,8 +6,8 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception # Comentar si da problemas
   protect_from_forgery with: :null_session # =>    Comentar si da problemas
   # protect_from_forgery with: :null_session
-  before_action :authenticate_usuario! # except: [:index, :home]
-	before_action :authenticate_user_from_token!
+  # before_action :authenticate_usuario! # except: [:index, :home]
+	# before_action :authenticate_user_from_token!
 
   
 

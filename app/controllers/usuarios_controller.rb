@@ -1,5 +1,5 @@
 class UsuariosController < ApplicationController
-  before_action :authenticate_usuario! #, except: [:index, :home]
+  # before_action :authenticate_usuario! #, except: [:index, :home]
   # before_action :authenticate_user_from_token!
 
   before_action :comprobar, except: [:create]
@@ -7,10 +7,10 @@ class UsuariosController < ApplicationController
   respond_to :json
 
   private def comprobar
-    if(!params.has_key?(:authenticate_token))
+    if(!params.has_key?(:authentication_token))
       render :json=>{:success=>false, :message=>"falta parametro authenticate_token"}, :status=>422
     else
-      @user = Usuario.find_by_authentication_token(params[:authenticate_token])
+      @user = Usuario.find_by_authentication_token(params[:authentication_token])
       if(@user)
         # render :json=>{:success=>true, :message=>"no comproba nada",:usuario => @user}, :status=>200
         return true

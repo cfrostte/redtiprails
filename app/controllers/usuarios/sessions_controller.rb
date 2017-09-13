@@ -25,7 +25,7 @@ class Usuarios::SessionsController < Devise::SessionsController
     if resource.valid_password?(params[:user_login][:password])
       sign_in(:user, resource)
       resource.ensure_authentication_token
-      render :json=> {:success=>true, :auth_token=>resource.authentication_token, :email=>resource.email}
+      render :json=> {:success=>true, :authentication_token=>resource.authentication_token, :email=>resource.email}
       return
     end
     invalid_login_attempt
@@ -83,7 +83,7 @@ class Usuarios::SessionsController < Devise::SessionsController
   protected
   def ensure_params_exist
     return unless params[:user_login].blank?
-    render :json=>{:success=>false, :message=>"missing usuario_login parameter"}, :status=>422
+    render :json=>{:success=>false, :message=>"missing user_login parameter"}, :status=>422
   end
 
   def invalid_login_attempt
