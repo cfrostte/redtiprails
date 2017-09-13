@@ -11,6 +11,9 @@ class UsuariosController < ApplicationController
       render :json=>{:success=>false, :message=>"falta parametro authenticate_token"}, :status=>422
     else
       @user = Usuario.find_by_authentication_token(params[:authentication_token])
+      if(!@user.confirmed_at)
+        render :json=>{:success=>false, :message=>"El usuario indicado aun no ha confirmado su cuenta"}, :status=>422
+      end
       if(@user)
         # render :json=>{:success=>true, :message=>"no comproba nada",:usuario => @user}, :status=>200
         return true

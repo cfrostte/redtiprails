@@ -11,8 +11,7 @@ Rails.application.routes.draw do
 	get '/canales', to: 'canales#index', as: 'canales'
 	get '/debugger', to: 'debugger#index', as: 'debugger'
 	get '/login', to: 'usuarios#login', as: 'login'
-	get '/usuarios', to: 'usuarios#index', as: 'usuarios'
-	
+	get '/usuarios/:id', to: 'usuarios#show'
 	root "debugger#index"
 
 end

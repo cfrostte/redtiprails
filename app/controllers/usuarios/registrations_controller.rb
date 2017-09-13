@@ -7,10 +7,9 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
     usuario = Usuario.new(usuario_params)
   
     if usuario.save
-
-      render :json => usuario.as_json(
-        :auth_token => usuario.authentication_token, 
-        :email => usuario.email), :status => 201
+      puts usuario.attributes
+      # render :json => usuario.as_json(:auth_token => usuario.authentication_token,:email => usuario.email), :status => 201
+      render :json =>{:success=>true, :message=>"El usuario se ha creado satisfactoriamente, se ha enviado un mail de confirmacion a su cuenta de correo electronico", :email=>usuario.email}, :status=>201
       return
     
     else
