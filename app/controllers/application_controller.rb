@@ -4,9 +4,12 @@ class ApplicationController < ActionController::Base
   
   # Con lo siguiente, se usaran primero las operaciones de Devise:
   # protect_from_forgery with: :exception # Comentar si da problemas
-  
-  # before_action :authenticate_usuario!, except: [:index, :home]
+  protect_from_forgery with: :null_session # =>    Comentar si da problemas
+  # protect_from_forgery with: :null_session
+  before_action :authenticate_usuario! # except: [:index, :home]
 	before_action :authenticate_user_from_token!
+
+  
 
   private
 
