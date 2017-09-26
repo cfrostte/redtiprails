@@ -21,7 +21,9 @@ class Usuarios::ConfirmationsController < Devise::ConfirmationsController
       respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
       p "----------------------------------------------------------------------------------------------------"
     else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      # respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      return render :json => { :success=>false, :errors=>resource.errors, status: :unprocessable_entity}, :status=>402
+      #{ render :new }
     end
   end
 
@@ -33,7 +35,8 @@ class Usuarios::ConfirmationsController < Devise::ConfirmationsController
   end
   def respond_with_navigational(resource)
     p "--------------------------------------RESPOND WITH NAVIGATIONAL--------------------------------------------------------------"
-    return render :json =>{:success=>true, :message=>"Esto es el RESPOND WITH NAVIGATIONAL",:usuario=>resource}, :status=>200
+    # return render :json =>{:success=>true, :message=>"Esto es el RESPOND WITH NAVIGATIONAL",:usuario=>resource}, :status=>200
+    return render :json =>{:success=>true, :message=>"Usuario confirmado satisfactoriamente"}, :status=>200
     p "----------------------------------------------------------------------------------------------------"
   end
   def after_confirmation_path_for(resource_name, resource)

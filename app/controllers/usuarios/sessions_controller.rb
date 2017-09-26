@@ -24,6 +24,13 @@ class Usuarios::SessionsController < Devise::SessionsController
 
     if resource.valid_password?(params[:user_login][:password])
       sign_in(:user, resource)
+      p "---------------------------------------------"
+      p sign_in(resource)
+      p "---------------------------------------------"
+      p current_usuario
+      p "---------------------------------------------"
+      p session
+      p "---------------------------------------------"
       resource.ensure_authentication_token
       render :json=> {:success=>true, :authentication_token=>resource.authentication_token, :email=>resource.email}
       return
