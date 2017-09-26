@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 	get '/debugger', to: 'debugger#index', as: 'debugger'
 	get '/login', to: 'usuarios#login', as: 'login'
 	get '/usuarios/:id', to: 'usuarios#show'
+	get '/usuarios', to: 'usuarios#index'
 	root "debugger#index"
 
 end

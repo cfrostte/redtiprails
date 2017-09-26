@@ -33,13 +33,13 @@ class Usuarios::ConfirmationsController < Devise::ConfirmationsController
   end
   def respond_with_navigational(resource)
     p "--------------------------------------RESPOND WITH NAVIGATIONAL--------------------------------------------------------------"
-    return render :json =>{:success=>true, :message=>"Esto es el RESPOND WITH NAVIGATIONAL",:usuarios=>resource}, :status=>202
+    return render :json =>{:success=>true, :message=>"Esto es el RESPOND WITH NAVIGATIONAL",:usuario=>resource}, :status=>200
     p "----------------------------------------------------------------------------------------------------"
   end
   def after_confirmation_path_for(resource_name, resource)
     # super(resource_name, resource)
     p "--------------------------------------AFTER CONFIRMATION PATH FOR--------------------------------------------------------------"
-    return render :json =>{:success=>true, :message=>"Esto es el after_confirmation_path_for",:usuarios=>resource}, :status=>202
+    return render :json =>{:success=>true, :message=>"Esto es el after_confirmation_path_for",:usuario=>resource}, :status=>200
     p "----------------------------------------------------------------------------------------------------"
   end
   # def show
