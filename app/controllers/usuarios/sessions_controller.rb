@@ -23,17 +23,28 @@ class Usuarios::SessionsController < Devise::SessionsController
     return invalid_login_attempt unless resource
 
     if resource.valid_password?(params[:user_login][:password])
-      sign_in(:user, resource)
-      p "---------------------------------------------"
-      p sign_in(resource)
-      p "---------------------------------------------"
-      p current_usuario
-      p "---------------------------------------------"
-      p session
-      p "---------------------------------------------"
-      resource.ensure_authentication_token
-      render :json=> {:success=>true, :authentication_token=>resource.authentication_token, :email=>resource.email}
-      return
+      # p "----------------------mostrando confirmer------------------"
+      # p resource.confirmed_at.blank?
+      # p "----------------------mostrando confirmer------------------"
+      if resource.confirmed_at != nil
+        # ensure_confirmed_account(resource)
+        sign_in(:user, resource)
+        p "---------------------------------------------"
+        p sign_in(resource)
+        p "---------------------------------------------"
+        p current_usuario
+        p "---------------------------------------------"
+        # p session.authentication_token
+        p "---------------------------------------------"
+        session[:hashAuth] = Devise.friendly_token
+        #resource.ensure_authentication_token
+        render :json=> {:success=>true, :authentication_token=>session[:hashAuth], :email=>resource.email}
+        return
+      else
+        render :json=> {:success=>false, :message=>"Debe confirmar su cuenta antes de iniciar sesion, por favor chequee su correo"}, :status=>400
+        return
+      end
+        
     end
     invalid_login_attempt
   end
@@ -98,6 +109,11 @@ class Usuarios::SessionsController < Devise::SessionsController
     render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
   end
 
+  # def ensure_confirmed_account(resource)
+  #   return unless resource.confirmed_at.blank?
+  #   render :json=> {:success=>false, :message=>"Debe confirmar su cuenta antes de iniciar sesion, por favor chequee su correo"}, :status=>400
+  #   # return
+  # end
 
 
   # GET /resource/sign_in
