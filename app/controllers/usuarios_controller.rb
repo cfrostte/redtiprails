@@ -6,22 +6,6 @@ class UsuariosController < ApplicationController
 
   respond_to :json
 
-  private def comprobar
-    if(!params.has_key?(:authentication_token))
-      render :json=>{:success=>false, :message=>"falta parametro authentication_token"}, :status=>422
-    else
-      @user = Usuario.find_by_authentication_token(params[:authentication_token])
-      if(@user == nil)
-        render :json=>{:success=>false, :message=>"token mal"}, :status=>422
-      elsif (!@user.confirmed_at)
-        render :json=>{:success=>false, :message=>"El usuario indicado aun no ha confirmado su cuenta"}, :status=>422
-      end
-      if(@user)
-        # render :json=>{:success=>true, :message=>"no comproba nada",:usuario => @user}, :status=>200
-        return true
-      end
-    end
-  end 
 
   def index
     @usuarios = Usuario.all
@@ -83,14 +67,44 @@ class UsuariosController < ApplicationController
   # DELETE /usuarios/1
   # DELETE /usuarios/1.json
   def destroy
+    @usuario = Usuario.find_by_id(params["id"])
+    p "-------------------------"
+    p params
+    p "-------------------------"
+    p Usuario.find_by_id(params["id"])
+    p "-------------------------"
+    p @usuario
+    p "-------------------------"
     @usuario.destroy
-    respond_to do |format|
-      format.html { redirect_to usuarios_url, notice: 'Usuario was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    render :json=> {:success=>true, :message=>"Usuario eliminado correctamente"}, :status=>200
+    # respond_to do |format|
+      # format.html { redirect_to usuarios_url, notice: 'Usuario was successfully destroyed.' }
+      # format.json { head :no_content }
+    # end
   end
 
   private
+  
+  def comprobar
+  if(!params.has_key?(:authentication_token))
+    p "-------------------------"
+    p session
+    p "-------------------------"
+    render :json=>{:success=>false, :message=>"falta parametro authentication_token"}, :status=>422
+  else
+    @user = Usuario.find_by_authentication_token(params[:authentication_token])
+      # if(params[:authentication_token] != session[:hashAuth])
+      if(!@user)
+        render :json=>{:success=>false, :message=>"token mal"}, :status=>422
+      # elsif (!@user.confirmed_at)
+        # render :json=>{:success=>false, :message=>"El usuario indicado aun no ha confirmado su cuenta"}, :status=>422
+      end
+      if(@user)
+        # render :json=>{:success=>true, :message=>"no comproba nada",:usuario => @user}, :status=>200
+        return true
+      end
+    end
+  end 
   # Use callbacks to share common setup or constraints between actions.
   def set_usuario
     @usuario = Usuario.find(params[:id])

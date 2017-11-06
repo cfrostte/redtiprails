@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 	get '/login', to: 'usuarios#login', as: 'login'
 	get '/usuarios/:id', to: 'usuarios#show'
 	get '/usuarios', to: 'usuarios#index'
+	delete '/usuarios/:id', to: 'usuarios#destroy'
 	root "debugger#index"
 
 end

@@ -2,6 +2,8 @@ class Usuarios::SessionsController < Devise::SessionsController
   prepend_before_action :require_no_authentication, only: [:new, :create]
   before_action :configure_sign_in_params, only: [:create]
   before_action :ensure_params_exist
+  prepend_before_action :verify_signed_out_user, only: :destroy
+
   respond_to :json
 
   # def create
@@ -29,14 +31,16 @@ class Usuarios::SessionsController < Devise::SessionsController
       if resource.confirmed_at != nil
         # ensure_confirmed_account(resource)
         sign_in(:user, resource)
-        p "---------------------------------------------"
-        p sign_in(resource)
-        p "---------------------------------------------"
-        p current_usuario
-        p "---------------------------------------------"
-        # p session.authentication_token
-        p "---------------------------------------------"
         session[:hashAuth] = Devise.friendly_token
+        p "-------------------SIGN_IN-------------"
+        p sign_in(:user, resource)
+        p "-----------------------------------------"
+        p "---------------SESSION [HASh-AUHT]--------------------------"
+        p session[:hashAuth]
+        p "-----------------------------------------"
+        p "--------------SESSION solo--------------------------"
+        p session
+        p "----------------------------------------"
         #resource.ensure_authentication_token
         render :json=> {:success=>true, :authentication_token=>session[:hashAuth], :email=>resource.email}
         return
@@ -95,11 +99,34 @@ class Usuarios::SessionsController < Devise::SessionsController
 #   end
   
   def destroy
+    p "-------------------SIGN_IN-------------"
+    p sign_in(:user, resource)
+    p "-----------------------------------------"
+    p "---------------SESSION [HASh-AUHT]--------------------------"
+    p session[:hashAuth]
+    p "-----------------------------------------"
+    p "--------------SESSION solo--------------------------"
+    p session
+    p "----------------------------------------"
+
     sign_out(resource_name)
+    respond_to_on_destroy
+    
+    p "-------------------SIGN_IN-------------"
+    p sign_in(:user, resource)
+    p "-----------------------------------------"
+    p "---------------SESSION [HASh-AUHT]--------------------------"
+    p session[:hashAuth]
+    p "-----------------------------------------"
+    p "--------------SESSION solo--------------------------"
+    p session
+    p "----------------------------------------"
   end
 
   protected
   def ensure_params_exist
+    p "---------------------------------------"
+    p params[:user_login]
     return unless params[:user_login].blank?
     render :json=>{:success=>false, :message=>"missing user_login parameter"}, :status=>422
   end
@@ -137,5 +164,40 @@ class Usuarios::SessionsController < Devise::SessionsController
   def configure_sign_in_params
     devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   end
+
+  private
+
+  def verify_signed_out_user
+    
+    p "-----------PARAMS --------------"
+    p params
+    p "-------------SESSION------------"
+    p session
+    p "-------------DESVIS.MAPPING------------"
+    p Devise.mappings.keys.map
+    p "-------------------------"
+    # if all_signed_out?
+    #   set_flash_message! :notice, :already_signed_out
+
+    #   render :json=> {:success=>false, :message=>"Mensaje del on destroy"}, :status=>400
+    # end
+  end
+
+  def all_signed_out?
+    users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+
+    users.all?(&:blank?)
+  end
+
+  def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { render :json=> {:success=>false, :message=>"Mensaje del on destroy"}, :status=>400 }
+      # format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+    end
+  end
+
 
 end

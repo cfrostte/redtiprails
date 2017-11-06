@@ -18,7 +18,6 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
       return
     
     else
-    
       warden.custom_failure!
       render :json => usuario.errors, :status => 422
     
