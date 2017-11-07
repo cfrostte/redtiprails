@@ -1,5 +1,19 @@
 Rails.application.routes.draw do
 	
+  get 'mensajes/new'
+
+  get 'mensajes/create'
+
+  get 'mensajes/update'
+
+  get 'mensajes/edit'
+
+  get 'mensajes/destroy'
+
+  get 'mensajes/index'
+
+  get 'mensajes/show'
+
 	devise_for :usuarios, controllers: { 
 		confirmations: 'usuarios/confirmations',
 		passwords: 'usuarios/passwords', 
