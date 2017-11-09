@@ -42,7 +42,8 @@ class Usuarios::SessionsController < Devise::SessionsController
         p session
         p "----------------------------------------"
         #resource.ensure_authentication_token
-        render :json=> {:success=>true, :authentication_token=>session[:hashAuth], :email=>resource.email}
+        # render :json=> {:success=>true, :authentication_token=>session[:hashAuth], :email=>resource.email}
+        render :json=> {:success=>true, :authentication_token=>resource.authentication_token, :email=>resource.email}
         return
       else
         render :json=> {:success=>false, :message=>"Debe confirmar su cuenta antes de iniciar sesion, por favor chequee su correo"}, :status=>400

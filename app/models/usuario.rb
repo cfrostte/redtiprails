@@ -4,7 +4,11 @@ class Usuario < ApplicationRecord
 
 	has_many :canals
 	has_many :mensajes
-	before_save :ensure_authentication_token
+	
+  validates_uniqueness_of :email
+  validates_uniqueness_of :nickname
+
+  before_save :ensure_authentication_token
 
   def ensure_authentication_token
 

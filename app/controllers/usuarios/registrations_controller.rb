@@ -3,7 +3,6 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   respond_to :json
   
   def create
-
     usuario = Usuario.new(usuario_params)
     usuario.skip_confirmation_notification!
     if usuario.save
@@ -18,7 +17,7 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
       return
     
     else
-      warden.custom_failure!
+      # warden.custom_failure!
       render :json => usuario.errors, :status => 422
     
     end

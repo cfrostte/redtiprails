@@ -83,6 +83,10 @@ class UsuariosController < ApplicationController
     # end
   end
 
+  def contactos
+    
+  end
+
   private
   
   def comprobar
