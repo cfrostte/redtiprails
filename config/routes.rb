@@ -22,11 +22,12 @@ Rails.application.routes.draw do
 		unlocks: 'usuarios/unlocks', 
 	}
 	
-	get '/canales', to: 'canales#index', as: 'canales'
-	get '/debugger', to: 'debugger#index', as: 'debugger'
-	get '/login', to: 'usuarios#login', as: 'login'
-	get '/usuarios/:id', to: 'usuarios#show'
-	get '/usuarios', to: 'usuarios#index'
+	get '/canales', 		to: 'canales#index', as: 'canales'
+	get '/debugger', 		to: 'debugger#index', as: 'debugger'
+	get '/login', 			to: 'usuarios#login', as: 'login'
+	get '/usuarios/:id', 	to: 'usuarios#show'
+	get '/usuarios', 		to: 'usuarios#index'
+	get '/usuarios/find/:string', to: 'usuarios#find'
 	delete '/usuarios/:id', to: 'usuarios#destroy'
 	root "debugger#index"
 

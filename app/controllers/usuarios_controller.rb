@@ -2,7 +2,7 @@ class UsuariosController < ApplicationController
   # before_action :authenticate_usuario! #, except: [:index, :home]
   # before_action :authenticate_user_from_token!
 
-  before_action :comprobar, except: [:create]
+  before_action :comprobar, except: [:create, :find]
 
   respond_to :json
 
@@ -85,6 +85,20 @@ class UsuariosController < ApplicationController
 
   def contactos
     
+  end
+
+  def find
+    p "-------------------------"
+    p params[:string]
+    p "-------------------------"
+    @search = params[:string]
+    # @result = Usuario.where(:nickname => params[:string]).or(Usuario.where(:email => params[:string]))
+    @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%"))
+    if(@result)
+      render :json=>{:success=>true, :result=>@result},:status=>200
+    else
+      render :json=>{:success=>false, :result=>"No existe el usuario"},:status=>404
+    end
   end
 
   private
