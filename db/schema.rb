@@ -22,8 +22,10 @@ ActiveRecord::Schema.define(version: 20170905220053) do
 
   create_table "mensajes", force: :cascade do |t|
     t.text "contenido"
+    t.integer "usuario_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["usuario_id"], name: "index_mensajes_on_usuario_id"
   end
 
   create_table "usuarios", force: :cascade do |t|

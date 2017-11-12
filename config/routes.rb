@@ -1,18 +1,4 @@
 Rails.application.routes.draw do
-	
-  get 'mensajes/new'
-
-  get 'mensajes/create'
-
-  get 'mensajes/update'
-
-  get 'mensajes/edit'
-
-  get 'mensajes/destroy'
-
-  get 'mensajes/index'
-
-  get 'mensajes/show'
 
 	devise_for :usuarios, controllers: { 
 		confirmations: 'usuarios/confirmations',
@@ -21,13 +7,19 @@ Rails.application.routes.draw do
 		sessions: 'usuarios/sessions', 
 		unlocks: 'usuarios/unlocks', 
 	}
-	
-	get '/canales', to: 'canales#index', as: 'canales'
+
+	delete '/usuarios/:id', to: 'usuarios#destroy'
+
+	# get '/canales', to: 'canales#index', as: 'canales'
 	get '/debugger', to: 'debugger#index', as: 'debugger'
 	get '/login', to: 'usuarios#login', as: 'login'
-	get '/usuarios/:id', to: 'usuarios#show'
+	get '/mensajes', to: 'mensajes#index'
+	get '/mensajes/:id', to: 'mensajes#show'
 	get '/usuarios', to: 'usuarios#index'
-	delete '/usuarios/:id', to: 'usuarios#destroy'
+	get '/usuarios/:id', to: 'usuarios#show'
+
+	post '/mensajes', to: 'mensajes#create'
+	
 	root "debugger#index"
 
 end
