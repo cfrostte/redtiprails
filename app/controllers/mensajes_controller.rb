@@ -11,10 +11,17 @@ class MensajesController < ApplicationController
   end
 
   def create # POST
+
     usuario = Usuario.find_by(nickname: params['nickname'])
-    mensaje = usuario.mensajes.new(contenido: params['contenido']);
-    mensaje.save
-    render json: mensaje
+    
+    if usuario 
+      mensaje = usuario.mensajes.new(contenido: params['contenido']);
+      mensaje.save
+      render json: mensaje
+    else
+      render json: usuario
+    end
+  
   end
 
 end
