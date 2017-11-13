@@ -53,15 +53,18 @@ class UsuariosController < ApplicationController
   # PATCH/PUT /usuarios/1
   # PATCH/PUT /usuarios/1.json
   def update
-    respond_to do |format|
-      if @usuario.update(usuario_params)
-        format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
-        format.json { render :show, status: :ok, location: @usuario }
+    # respond_to do |format|
+      # if @usuario.update(usuario_params)
+      @usuario = Usuario.find_by_id(params[:id])
+      
+      if @usuario.update(params[:usuario])
+        # format.json { render :show, status: :ok, location: @usuario }
+        render :json=> {:success=>true, :usuario=>@usuario, :message=>"Usuario actualizado correctamente"},:status=>200
       else
-        format.html { render :edit }
-        format.json { render json: @usuario.errors, status: :unprocessable_entity }
+        render :json=> {:success=>false, :message=>"Error al actualizar"},:status=>404
+        # format.json { render json: @usuario.errors, status: :unprocessable_entity }
       end
-    end
+    # end
   end
 
   # DELETE /usuarios/1
@@ -94,7 +97,7 @@ class UsuariosController < ApplicationController
     @search = params[:string]
     # @result = Usuario.where(:nickname => params[:string]).or(Usuario.where(:email => params[:string]))
     @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%"))
-    if(@result)
+    if(@result && @result.count > 0)
       render :json=>{:success=>true, :result=>@result},:status=>200
     else
       render :json=>{:success=>false, :result=>"No existe el usuario"},:status=>404
