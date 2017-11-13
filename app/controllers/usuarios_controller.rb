@@ -2,7 +2,7 @@ class UsuariosController < ApplicationController
   # before_action :authenticate_usuario! #, except: [:index, :home]
   # before_action :authenticate_user_from_token!
 
-  before_action :comprobar, except: [:create, :find]
+  before_action :comprobar, except: [:create]
 
   respond_to :json
 
@@ -56,8 +56,10 @@ class UsuariosController < ApplicationController
     # respond_to do |format|
       # if @usuario.update(usuario_params)
       @usuario = Usuario.find_by_id(params[:id])
-      
-      if @usuario.update(params[:usuario])
+      p "-----------------------------------"
+      p params[:usuario]
+      p "-----------------------------------"
+      if @usuario.update(usuario_params)
         # format.json { render :show, status: :ok, location: @usuario }
         render :json=> {:success=>true, :usuario=>@usuario, :message=>"Usuario actualizado correctamente"},:status=>200
       else
@@ -70,20 +72,20 @@ class UsuariosController < ApplicationController
   # DELETE /usuarios/1
   # DELETE /usuarios/1.json
   def destroy
-    @usuario = Usuario.find_by_id(params["id"])
-    p "-------------------------"
-    p params
-    p "-------------------------"
-    p Usuario.find_by_id(params["id"])
-    p "-------------------------"
-    p @usuario
-    p "-------------------------"
-    @usuario.destroy
-    render :json=> {:success=>true, :message=>"Usuario eliminado correctamente"}, :status=>200
-    # respond_to do |format|
-      # format.html { redirect_to usuarios_url, notice: 'Usuario was successfully destroyed.' }
-      # format.json { head :no_content }
-    # end
+
+    @resource = Usuario.find_for_database_authentication(:email => params[:user_login][:email])
+    return invalid_login_attempt unless @resource
+
+    if @resource.valid_password?(params[:user_login][:password])
+      if @resource.authentication_token == params[:authentication_token]
+        if @resource.destroy
+          return render :json=> {:success=>true, :message=>"Usuario eliminado correctamente"}, :status=>200
+        end
+      else
+        return render :json=> {:success=>false, :message=>"Error with your authentication_token"}, :status=>401
+      end
+    end
+    return invalid_login_attempt
   end
 
   def contactos
@@ -92,11 +94,11 @@ class UsuariosController < ApplicationController
 
   def find
     p "-------------------------"
-    p params[:string]
+    p params[:search]
     p "-------------------------"
-    @search = params[:string]
+    @search = params[:search]
     # @result = Usuario.where(:nickname => params[:string]).or(Usuario.where(:email => params[:string]))
-    @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%"))
+    @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%")).where.not('confirmed_at' => nil)
     if(@result && @result.count > 0)
       render :json=>{:success=>true, :result=>@result},:status=>200
     else
@@ -133,7 +135,14 @@ class UsuariosController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def usuario_params
-    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
+     params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
+     # params.permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
+  end
+
+  protected
+  def invalid_login_attempt
+    # warden.custom_failure!
+    render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
   end
 
 end

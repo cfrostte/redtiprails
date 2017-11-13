@@ -25,12 +25,45 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   
   end
 
+   def destroy
+
+    resource = Usuario.find_for_database_authentication(:email => params[:user_credentials][:email])
+    return invalid_login_attempt unless resource
+
+    if resource.valid_password?(params[:user_credentials][:password])
+
+
+      @usuario = Usuario.find_by_id(params["id"])
+      p "-------------------------"
+      p params
+      p "-------------------------"
+      p Usuario.find_by_id(params["id"])
+      p "-------------------------"
+      p @usuario
+      p "-------------------------"
+      @usuario.destroy
+      render :json=> {:success=>true, :message=>"Usuario eliminado correctamente"}, :status=>200
+      # respond_to do |format|
+        # format.html { redirect_to usuarios_url, notice: 'Usuario was successfully destroyed.' }
+        # format.json { head :no_content }
+      # end
+      end
+    invalid_login_attempt
+  end
+
   private
 
   def usuario_params
     
-    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
+    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
     # params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
+  end
+
+  protected
+
+  def invalid_login_attempt
+    # warden.custom_failure!
+    render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
   end
 
   ############################################################################## 
