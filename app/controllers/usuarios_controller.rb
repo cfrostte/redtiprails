@@ -110,20 +110,13 @@ class UsuariosController < ApplicationController
   
   def comprobar
   if(!params.has_key?(:authentication_token))
-    p "-------------------------"
-    p session
-    p "-------------------------"
     render :json=>{:success=>false, :message=>"falta parametro authentication_token"}, :status=>422
   else
     @user = Usuario.find_by_authentication_token(params[:authentication_token])
-      # if(params[:authentication_token] != session[:hashAuth])
       if(!@user)
         render :json=>{:success=>false, :message=>"token mal"}, :status=>422
-      # elsif (!@user.confirmed_at)
-        # render :json=>{:success=>false, :message=>"El usuario indicado aun no ha confirmado su cuenta"}, :status=>422
       end
       if(@user)
-        # render :json=>{:success=>true, :message=>"no comproba nada",:usuario => @user}, :status=>200
         return true
       end
     end
