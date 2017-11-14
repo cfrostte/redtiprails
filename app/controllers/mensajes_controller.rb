@@ -13,17 +13,9 @@ class MensajesController < ApplicationController
   end
 
   def create # POST
-    @remitente = params[:remitente]
+    @remitente = params[:id]
     @destinatario = params[:destinatario]
     @contenido = params[:contenido]
-    p "------------------------"
-    p @remitente
-    p "------------------------"
-    p @remitente.class
-    p "------------------------"
-    p @destinatario
-    p "------------------------"
-    p @destinatario.class
 
     usuario = Usuario.find_by(nickname: params['nickname'])
     
@@ -42,7 +34,8 @@ class MensajesController < ApplicationController
   end
 
   def chat
-    @remitente = params[:remitente]
+    # @remitente = params[:remitente]
+    @remitente = params[:id]
     @destinatario = params[:destinatario]
 
     @chat = Mensaje.where('destinatario_id' => @destinatario).where('remitente_id' => @remitente).or(Mensaje.where('destinatario_id' => @remitente).where('remitente_id' => @destinatario)).order(created_at: :asc)#.select(:id, :contenido, :created_at )
@@ -64,7 +57,8 @@ class MensajesController < ApplicationController
     @user = Usuario.find_by_authentication_token(params[:authentication_token])
       if(!@user)
         render :json=>{:success=>false, :message=>"token mal"}, :status=>422
-      elsif (@user.authentication_token != Usuario.find(params[:remitente]).authentication_token)
+      # elsif (@user.authentication_token != Usuario.find(params[:remitente]).authentication_token)
+      elsif (@user.authentication_token != Usuario.find(params[:id]).authentication_token)
         render :json=>{:success=>false, :message=>"token mal"}, :status=>422
       end
       if(@user)

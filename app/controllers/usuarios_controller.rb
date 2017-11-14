@@ -89,7 +89,17 @@ class UsuariosController < ApplicationController
   end
 
   def contactos
-    
+    @remitente = params[:id]
+    @ids = Mensaje.where(:remitente_id => @remitente).select(:destinatario_id).distinct
+    @contactos = []
+    @ids.each do |id|
+      resource = Usuario.find(id.destinatario_id)
+      if(resource)
+        @contactos.push(resource)
+      end
+    end
+
+    render :json => {:contactos => @contactos}, status=>200
   end
 
   def find
