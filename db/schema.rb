@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170905220053) do
+ActiveRecord::Schema.define(version: 20170905220054) do
 
   create_table "canals", force: :cascade do |t|
     t.string "nombre"
@@ -22,8 +22,12 @@ ActiveRecord::Schema.define(version: 20170905220053) do
 
   create_table "mensajes", force: :cascade do |t|
     t.text "contenido"
+    t.integer "destinatario_id"
+    t.integer "remitente_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["destinatario_id"], name: "index_mensajes_on_destinatario_id"
+    t.index ["remitente_id"], name: "index_mensajes_on_remitente_id"
   end
 
   create_table "usuarios", force: :cascade do |t|

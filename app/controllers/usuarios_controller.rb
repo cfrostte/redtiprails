@@ -53,54 +53,80 @@ class UsuariosController < ApplicationController
   # PATCH/PUT /usuarios/1
   # PATCH/PUT /usuarios/1.json
   def update
-    respond_to do |format|
+    # respond_to do |format|
+      # if @usuario.update(usuario_params)
+      @usuario = Usuario.find_by_id(params[:id])
+      p "-----------------------------------"
+      p params[:usuario]
+      p "-----------------------------------"
       if @usuario.update(usuario_params)
-        format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
-        format.json { render :show, status: :ok, location: @usuario }
+        # format.json { render :show, status: :ok, location: @usuario }
+        render :json=> {:success=>true, :usuario=>@usuario, :message=>"Usuario actualizado correctamente"},:status=>200
       else
-        format.html { render :edit }
-        format.json { render json: @usuario.errors, status: :unprocessable_entity }
+        render :json=> {:success=>false, :message=>"Error al actualizar"},:status=>404
+        # format.json { render json: @usuario.errors, status: :unprocessable_entity }
       end
-    end
+    # end
   end
 
   # DELETE /usuarios/1
   # DELETE /usuarios/1.json
   def destroy
-    @usuario = Usuario.find_by_id(params["id"])
+
+    @resource = Usuario.find_for_database_authentication(:email => params[:user_login][:email])
+    return invalid_login_attempt unless @resource
+
+    if @resource.valid_password?(params[:user_login][:password])
+      if @resource.authentication_token == params[:authentication_token]
+        if @resource.destroy
+          return render :json=> {:success=>true, :message=>"Usuario eliminado correctamente"}, :status=>200
+        end
+      else
+        return render :json=> {:success=>false, :message=>"Error with your authentication_token"}, :status=>401
+      end
+    end
+    return invalid_login_attempt
+  end
+
+  def contactos
+    @remitente = params[:id]
+    @ids = Mensaje.where(:remitente_id => @remitente).select(:destinatario_id).distinct
+    @contactos = []
+    @ids.each do |id|
+      resource = Usuario.find(id.destinatario_id)
+      if(resource)
+        @contactos.push(resource)
+      end
+    end
+
+    render :json => {:contactos => @contactos}, status=>200
+  end
+
+  def find
     p "-------------------------"
-    p params
+    p params[:search]
     p "-------------------------"
-    p Usuario.find_by_id(params["id"])
-    p "-------------------------"
-    p @usuario
-    p "-------------------------"
-    @usuario.destroy
-    render :json=> {:success=>true, :message=>"Usuario eliminado correctamente"}, :status=>200
-    # respond_to do |format|
-      # format.html { redirect_to usuarios_url, notice: 'Usuario was successfully destroyed.' }
-      # format.json { head :no_content }
-    # end
+    @search = params[:search]
+    # @result = Usuario.where(:nickname => params[:string]).or(Usuario.where(:email => params[:string]))
+    @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%")).where.not('confirmed_at' => nil)
+    if(@result && @result.count > 0)
+      render :json=>{:success=>true, :result=>@result},:status=>200
+    else
+      render :json=>{:success=>false, :result=>"No existe el usuario"},:status=>404
+    end
   end
 
   private
   
   def comprobar
   if(!params.has_key?(:authentication_token))
-    p "-------------------------"
-    p session
-    p "-------------------------"
     render :json=>{:success=>false, :message=>"falta parametro authentication_token"}, :status=>422
   else
     @user = Usuario.find_by_authentication_token(params[:authentication_token])
-      # if(params[:authentication_token] != session[:hashAuth])
       if(!@user)
         render :json=>{:success=>false, :message=>"token mal"}, :status=>422
-      # elsif (!@user.confirmed_at)
-        # render :json=>{:success=>false, :message=>"El usuario indicado aun no ha confirmado su cuenta"}, :status=>422
       end
       if(@user)
-        # render :json=>{:success=>true, :message=>"no comproba nada",:usuario => @user}, :status=>200
         return true
       end
     end
@@ -112,7 +138,14 @@ class UsuariosController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def usuario_params
-    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
+     params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
+     # params.permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
+  end
+
+  protected
+  def invalid_login_attempt
+    # warden.custom_failure!
+    render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
   end
 
 end
