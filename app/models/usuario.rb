@@ -3,7 +3,13 @@ class Usuario < ApplicationRecord
   devise :database_authenticatable, :registerable, :confirmable, :recoverable
 
 	has_many :canals
-	has_many :mensajes
+	# has_many :mensajes
+
+  has_many :destinatario_mensajes, :class_name => 'Mensaje', :foreign_key => 'destinatario_id'
+  has_many :remitente_mensajes, :class_name => 'Mensaje', :foreign_key => 'remitente_id'
+  # has_many :destinatario_mensajes, :class_name => 'Mensajes', :foreign_key => 'destinatario_id'
+  # has_many :remitente_mensajes, :class_name => 'Mensajes', :foreign_key => 'remitente_id'
+
 	
   validates_uniqueness_of :email
   validates_uniqueness_of :nickname
