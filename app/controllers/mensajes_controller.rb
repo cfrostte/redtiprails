@@ -76,23 +76,12 @@ class MensajesController < ApplicationController
     @emisor = params[:remitente]
     @receptor = params[:destinatario]
     @mensaje = params[:contenido]
-    p "------------------------------"
-    p @emisor
-    p "------------------------------"
-    p params[:remitente]
-    p "------------------------------"
-    p remitente
-    p "------------------------------"
-    p @receptor
-    p "------------------------------"
-    p @mensaje
-    p "------------------------------"
-    # response = HTTParty.get('https://redtipsocket.herokuapp.com/mensaje?emisor=2&mensaje=probando&receptor=1')
-    response = HTTParty.get('https://redtipsocket.herokuapp.com/mensaje?emisor='+remitente+'&mensaje='+@mensaje+'&receptor='+@receptor+'', :verify => false)
-    p "-------RESPONSE-------"
-    p response
-    p "-------RESPONSE-------"
-
+    # Al servidor de Node en Heroku
+    # response = HTTParty.get('https://redtipsocket.herokuapp.com/mensaje?emisor='+remitente+'&mensaje='+@mensaje+'&receptor='+@receptor+'', :verify => false)
+    # ##################################
+    # Al servidor de Node en localhost.
+    response = HTTParty.get('http://localhost:8080/mensaje?emisor='+remitente+'&mensaje='+@mensaje+'&receptor='+@receptor+'', :verify => false)
+    # ##################################
   end
 
 end
