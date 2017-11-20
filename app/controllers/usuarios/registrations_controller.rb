@@ -3,6 +3,7 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   respond_to :json
   
   def create
+    params.delete :registration
     usuario = Usuario.new(usuario_params)
     usuario.skip_confirmation_notification!
     
@@ -19,7 +20,8 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
     
     else
       # warden.custom_failure!
-      render :json => usuario.errors, :status => 422
+      render :json =>{:success=>false, :message=>"repetido"}, :status=>422
+      # render :json => usuario.errors, :status => 422
     
     end
   
@@ -55,8 +57,8 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
 
   def usuario_params
     
-    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
-    # params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar)
+    # params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
+    params.permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar, :registration)
   end
 
   protected

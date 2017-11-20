@@ -14,6 +14,7 @@ class MensajesController < ApplicationController
 
   def create # POST
     @remitente = params[:id]
+    @emisor = @remitente
     @destinatario = params[:destinatario]
     @contenido = params[:contenido]
 
@@ -22,6 +23,10 @@ class MensajesController < ApplicationController
     @mensaje = Mensaje.create(:contenido => @contenido, :remitente_id => Usuario.find(@remitente).id, :destinatario_id => Usuario.find(@destinatario).id)
     
     if @mensaje.save 
+      p "-------------antes!-------------"
+      p @emisor, @destinatario, @contenido
+      p "-------------antes!-------------"
+      sendNodeMsj(@emisor, @destinatario, @contenido)
       # mensaje = usuario.mensajes.new(contenido: params['contenido']);
       # mensaje = Mensaje.create(destinatario_id: usuario.id, contenido: params['contenido'], remitente_id: 1)
       # mensaje.save
@@ -67,6 +72,27 @@ class MensajesController < ApplicationController
     end
   end
 
+  def sendNodeMsj(remitente, destinatario, contenido)
+    @emisor = params[:remitente]
+    @receptor = params[:destinatario]
+    @mensaje = params[:contenido]
+    p "------------------------------"
+    p @emisor
+    p "------------------------------"
+    p params[:remitente]
+    p "------------------------------"
+    p remitente
+    p "------------------------------"
+    p @receptor
+    p "------------------------------"
+    p @mensaje
+    p "------------------------------"
+    # response = HTTParty.get('https://redtipsocket.herokuapp.com/mensaje?emisor=2&mensaje=probando&receptor=1')
+    response = HTTParty.get('https://redtipsocket.herokuapp.com/mensaje?emisor='+remitente+'&mensaje='+@mensaje+'&receptor='+@receptor+'', :verify => false)
+    p "-------RESPONSE-------"
+    p response
+    p "-------RESPONSE-------"
 
+  end
 
 end

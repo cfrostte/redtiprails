@@ -1,7 +1,7 @@
 class Usuarios::SessionsController < Devise::SessionsController
   prepend_before_action :require_no_authentication, only: [:new, :create]
   before_action :configure_sign_in_params, only: [:create]
-  before_action :ensure_params_exist
+  # before_action :ensure_params_exist
   prepend_before_action :verify_signed_out_user, only: :destroy
 
   respond_to :json
@@ -19,6 +19,46 @@ class Usuarios::SessionsController < Devise::SessionsController
   #     invalid_login_attempt
   #   end
   # end
+
+def new
+    p "---------------------------------------"
+    p params.inspect
+    p "---------------------------------------"
+    # resource = Usuario.find_for_database_authentication(:email => params[:user_login][:email])
+    resource = Usuario.find_for_database_authentication(:email => params[:email])
+    return invalid_login_attempt unless resource
+
+    # if resource.valid_password?(params[:user_login][:password])
+    if resource.valid_password?(params[:password])
+      # p "----------------------mostrando confirmer------------------"
+      # p resource.confirmed_at.blank?
+      # p "----------------------mostrando confirmer------------------"
+      if resource.confirmed_at != nil
+        # ensure_confirmed_account(resource)
+        sign_in(:user, resource)
+        session[:hashAuth] = Devise.friendly_token
+        p "-------------------SIGN_IN-------------"
+        p sign_in(:user, resource)
+        p "-----------------------------------------"
+        p "---------------SESSION [HASh-AUHT]--------------------------"
+        p session[:hashAuth]
+        p "-----------------------------------------"
+        p "--------------SESSION solo--------------------------"
+        p session
+        p "----------------------------------------"
+        #resource.ensure_authentication_token
+        # render :json=> {:success=>true, :authentication_token=>session[:hashAuth], :email=>resource.email}
+        render :json=> {:success=>true, :authentication_token=>resource.authentication_token, :email=>resource.email}
+        return
+      else
+        render :json=> {:success=>false, :message=>"Debe confirmar su cuenta antes de iniciar sesion, por favor chequee su correo"}, :status=>400
+        return
+      end
+        
+    end
+    invalid_login_attempt
+  end
+
 
   def create
     resource = Usuario.find_for_database_authentication(:email => params[:user_login][:email])
