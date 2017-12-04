@@ -66,3 +66,5 @@ gem 'active_model_serializers', '~>0.8.1'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'devise'
 gem 'bcrypt', '~> 3.1.7', platforms: :ruby
+# gem 'bcrypt-ruby', '3.1.0', :require => 'bcrypt'
+gem "paperclip", "~> 5.0.0.beta1"
