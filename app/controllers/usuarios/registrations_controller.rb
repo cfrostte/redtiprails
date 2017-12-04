@@ -5,7 +5,7 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   def create
     params.delete :registration
     usuario = Usuario.new(usuario_params)
-    usuario.skip_confirmation_notification!
+    # usuario.skip_confirmation_notification!
     
     if usuario.save
       puts usuario.attributes
@@ -15,7 +15,7 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
       # render :json =>{:success=>true, :message=>"El usuario se ha creado satisfactoriamente, se ha enviado un mail de confirmacion a su cuenta de correo electronico"}, :status=>201
 
       #Mientras tanto renderizo esto
-      render :json =>{:success=>true, :message=>"El usuario se ha creado satisfactoriamente, se ha enviado un mail de confirmacion a su cuenta de correo electronico", :email=>usuario.email, :confirmation_token=>usuario.confirmation_token}, :status=>201
+      render :json =>{:success=>true, :message=>"El usuario se ha creado satisfactoriamente, se ha enviado un mail de confirmacion a su cuenta de correo electronico",:id=>usuario.id, :email=>usuario.email, :confirmation_token=>usuario.confirmation_token}, :status=>201
       return
     
     else
@@ -57,8 +57,8 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
 
   def usuario_params
     
-    # params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
-    params.permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar, :registration)
+    params.require(:usuario).permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :instagram, :avatar)
+    # params.permit(:nickname, :password, :email, :facebook, :twitter, :linkedin, :avatar, :registration)
   end
 
   protected

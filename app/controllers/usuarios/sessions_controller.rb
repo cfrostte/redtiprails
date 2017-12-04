@@ -68,7 +68,7 @@ def new
       # p "----------------------mostrando confirmer------------------"
       # p resource.confirmed_at.blank?
       # p "----------------------mostrando confirmer------------------"
-      if resource.confirmed_at != nil
+      # if resource.confirmed_at != nil
         # ensure_confirmed_account(resource)
         sign_in(:user, resource)
         session[:hashAuth] = Devise.friendly_token
@@ -83,12 +83,13 @@ def new
         p "----------------------------------------"
         #resource.ensure_authentication_token
         # render :json=> {:success=>true, :authentication_token=>session[:hashAuth], :email=>resource.email}
-        render :json=> {:success=>true, :authentication_token=>resource.authentication_token, :email=>resource.email}
+        # render :json=> {:success=>true, :authentication_token=>resource.authentication_token, :email=>resource.email}
+        render :json=> {:success=>true, :usuario=>resource}
         return
-      else
-        render :json=> {:success=>false, :message=>"Debe confirmar su cuenta antes de iniciar sesion, por favor chequee su correo"}, :status=>400
-        return
-      end
+      # else
+        # render :json=> {:success=>false, :message=>"Debe confirmar su cuenta antes de iniciar sesion, por favor chequee su correo"}, :status=>400
+        # return
+      # end
         
     end
     invalid_login_attempt

@@ -1,6 +1,6 @@
 class Usuario < ApplicationRecord
 	
-  devise :database_authenticatable, :registerable, :confirmable, :recoverable
+  devise :database_authenticatable, :registerable, :recoverable #:confirmable
 
 	has_many :canals
 	# has_many :mensajes
