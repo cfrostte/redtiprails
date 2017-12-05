@@ -108,7 +108,8 @@ class UsuariosController < ApplicationController
     p "-------------------------"
     @search = params[:search]
     # @result = Usuario.where(:nickname => params[:string]).or(Usuario.where(:email => params[:string]))
-    @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%")).where.not('confirmed_at' => nil)
+    # @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%")).where.not('confirmed_at' => nil)
+    @result = Usuario.where("nickname like ?", "#{@search}%").or(Usuario.where("email like ?", "#{@search}%"))   
     if(@result && @result.count > 0)
       render :json=>{:success=>true, :result=>@result},:status=>200
     else
